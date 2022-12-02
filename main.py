@@ -140,10 +140,8 @@ with L:
             剧本的基本单元为 `{事件: {选项: 事件}}` 结构，均使用 `字典` 表示（`{}`），比如以下展示一个最基础的剧情：
             """
         )
-        st.write(
-            f"""
-            ```
-            {json.dumps(
+        st.code(
+            json.dumps(
                 {
                     "小明准备去上课时发现自己忘记写作业了": {
                         "开摆": "挂科啦",
@@ -153,8 +151,8 @@ with L:
                 },
                 indent=4,
                 ensure_ascii=False,
-            )}
-            """
+            ),
+            language="json",
         )
     with st.expander("分支剧情嵌套"):
         st.write(
@@ -162,45 +160,36 @@ with L:
             如果一个选项会导致进入一个新的事件分支，那么可将上述基本单元进行嵌套，形如 `{事件: {选项: {事件: {选项: 事件}}}}`，比如以下展示一个简单的分支剧情：
             """
         )
-        st.write(
-            f"""
-            ```
-            {
-                json.dumps(
-                    {
-                        "起点": {
-                            "选项 A": {
-                                "分支 A": {
-                                    "选项 C": "结束",
-                                    "选项 D": "结束",
-                                }
-                            },
-                            "选项 B": {
-                                "分支 B": {
-                                    "选项 E": "结束",
-                                    "选项 F": "结束",
-                                }
-                            },
-                        }
-                    },
-                    indent=4,
-                    ensure_ascii=False,
-                )
-            }
-            """
+        st.code(
+            json.dumps(
+                {
+                    "起点": {
+                        "选项 A": {
+                            "分支 A": {
+                                "选项 C": "结束",
+                                "选项 D": "结束",
+                            }
+                        },
+                        "选项 B": {
+                            "分支 B": {
+                                "选项 E": "结束",
+                                "选项 F": "结束",
+                            }
+                        },
+                    }
+                },
+                indent=4,
+                ensure_ascii=False,
+            ),
+            language="json",
         )
 
 with R:
     # Preview
-    # st.subheader("预览")
-
     if not check_json_health(st.session_state["content"]):
         # Failed to parse JSON
         st.error("格式错误，请对照下方说明和编辑器提示修正")
         st.stop()
-
-    # with st.expander("原始数据"):
-    #     st.json(json.loads(st.session_state["content"]))
 
     events, labels, links = parse_story()
     if not events or not labels or not links:
