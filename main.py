@@ -109,7 +109,7 @@ L, R = st.columns(2)
 
 with L:
     # Editor
-    ace(
+    st.session_state["content"] = ace(
         value=st.session_state["content"],
         placeholder="在这里输入剧本",
         language="json",
@@ -120,7 +120,6 @@ with L:
         wrap=st.session_state["wrap"],
         show_gutter=st.session_state["show_line_numbers"],
         min_lines=24,
-        key="content",
     )
 
     # Help message
@@ -236,6 +235,7 @@ with R:
                         json.loads(content), indent=4, ensure_ascii=False
                     )
                     st.success("载入成功")
+                    st.experimental_rerun()
                 else:
                     st.error("JSON 格式错误")
             else:
